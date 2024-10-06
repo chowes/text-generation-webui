@@ -1,5 +1,6 @@
 import base64
 import copy
+import os
 import re
 import time
 from collections import deque
@@ -12,6 +13,7 @@ import torch.nn.functional as F
 from PIL import Image
 from transformers import LogitsProcessor, LogitsProcessorList
 
+from extensions.openai.script import preset
 from extensions.openai.errors import InvalidRequestError
 from extensions.openai.utils import debug_msg
 from modules import shared
@@ -96,8 +98,10 @@ def process_parameters(body, is_legacy=False):
         generate_params['do_sample'] = False
         generate_params['top_k'] = 1
 
-    if body['preset'] is not None:
-        preset = load_preset_memoized(body['preset'])
+    preset_name = body.get('preset', os.environ.get("OPENEDAI_DEFAULT_PRESET", params.get('default_preset')))
+    if preset_name:
+        debug_msg(f"Loading preset {preset_name}")
+        preset = load_preset_memoized(preset_name)
         generate_params.update(preset)
 
     generate_params['custom_stopping_strings'] = []

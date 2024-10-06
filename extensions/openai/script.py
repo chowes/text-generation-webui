@@ -53,6 +53,7 @@ from .typing import (
 )
 
 params = {
+    'default_preset': '',
     'embedding_device': 'cpu',
     'embedding_model': 'sentence-transformers/all-mpnet-base-v2',
     'sd_webui_url': '',
