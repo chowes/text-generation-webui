@@ -15,17 +15,19 @@ def get_current_model_info():
 
 
 def list_models():
-    return {'model_names': get_available_models()[1:]}
+    return {'model_names': get_available_models()}
 
 
-def list_dummy_models():
+def list_available_models():
     result = {
         "object": "list",
         "data": []
     }
 
+    available_models = get_available_models()
+
     # these are expected by so much, so include some here as a dummy
-    for model in ['gpt-3.5-turbo', 'text-embedding-ada-002']:
+    for model in ['gpt-3.5-turbo', 'text-embedding-ada-002'] + available_models:
         result["data"].append(model_info_dict(model))
 
     return result
